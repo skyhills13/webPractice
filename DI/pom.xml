@@ -23,5 +23,16 @@
   		<artifactId>spring-boot-starter</artifactId>
   		<version>1.1.4.RELEASE</version>
   	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.11</version>
+  		<scope>test</scope> <!-- scope라는 것은 test단계에서만 필요한 library라는 뜻. 배포할때는 안들어가.   -->
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-test</artifactId>
+  		<version>4.0.5.RELEASE</version>
+  	</dependency>
   </dependencies>
 </project>
