@@ -10,10 +10,14 @@ import tobyspring.domain.users.User;
 
 public class UserDao {
 	
-	public void add(User user) throws ClassNotFoundException, SQLException{
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/tobyspring","root","");
-
+		return conn;
+	}
+	
+	public void add(User user) throws ClassNotFoundException, SQLException{
+		Connection conn = getConnection();
 		PreparedStatement ps = conn.prepareStatement(
 			"insert into users(id, name, password) values (?, ?, ?)");
 		ps.setString(1, user.getId());
@@ -27,8 +31,7 @@ public class UserDao {
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/tobyspring","root","");
+		Connection conn = getConnection();
 		
 		PreparedStatement ps = conn.prepareStatement(
 				"select * from users where id = ?");
