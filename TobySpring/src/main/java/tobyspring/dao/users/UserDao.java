@@ -12,7 +12,7 @@ public class UserDao {
 	
 	public void add(User user) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/tobyspring","spring","book");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/tobyspring","root","");
 
 		PreparedStatement ps = conn.prepareStatement(
 			"insert into users(id, name, password) values (?, ?, ?)");
@@ -28,7 +28,7 @@ public class UserDao {
 	
 	public User get(String id) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/tobyspring","spring","book");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/tobyspring","root","");
 		
 		PreparedStatement ps = conn.prepareStatement(
 				"select * from users where id = ?");
@@ -46,5 +46,26 @@ public class UserDao {
 		conn.close();
 
 		return user;
+	}
+	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		UserDao dao = new UserDao();
+		
+		User user = new User();
+		user.setId("dooby");
+		user.setName("dobyJung");
+		user.setPassword("ehqlehql");
+		
+		dao.add(user);
+		
+		System.out.println(user.getId() + " : 등록");
+		
+		User user2 = dao.get(user.getId());
+		
+		System.out.println(user2.getName());
+		
+		System.out.println(user2.getPassword());
+		
+		System.out.println(user2.getId() + " : 조회 성공");
 	}
 }
