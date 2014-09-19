@@ -5,9 +5,10 @@ import tobyspring.dao.users.UserDao;
 import tobyspring.domain.users.User;
 
 
-public class TempTest {
+public class UserDaoTest {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		UserDao dao = new UserDao();
+		ConnectionMaker connectionMaker = new DConnectionMaker();
+		UserDao dao = new UserDao(connectionMaker);
 		
 		User user = new User();
 		user.setId("dooby");
