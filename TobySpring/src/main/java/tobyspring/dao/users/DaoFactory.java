@@ -9,25 +9,13 @@ public class DaoFactory {
 	
 	@Bean
 	public ConnectionMaker connectionMaker(){
-		ConnectionMaker connectionMaker = new DConnectionMaker();
-		return connectionMaker;
+		return new DConnectionMaker();
 	}
 	
 	@Bean
 	public UserDao userDao() {
 		UserDao userDao = new UserDao();
 		userDao.setConnectionMaker(connectionMaker());
-		return userDao;
-	}
-	
-	@Bean
-	public UserDao accountDao() {
-		return new UserDao(new DConnectionMaker());
-	}
-	
-	@Bean
-	public UserDao messageDao() {
-		UserDao userDao = new UserDao(connectionMaker());
 		return userDao;
 	}
 }
