@@ -5,8 +5,15 @@
 
 	<!-- 첫번째 빈의 id가 myConnectionMaker로 바뀐다면, 두번째 bean의 ref도 똑같이 바뀌어야 한다.
 	DaoFactory를 보면 명확해지고, 책의 131, 132 페이지를 보고 확인할 수 있다. -->
-	<bean id="connectionMaker" class ="tobyspring.dao.users.DConnectionMaker"></bean>
+<!-- 	<bean id="connectionMaker" class ="tobyspring.dao.users.DConnectionMaker"></bean> -->
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/tobyspring" />
+		<property name="username" value ="root" />
+		<property name="password" value="" />
+	</bean>
 	<bean id="userDao" class="tobyspring.dao.users.UserDao">
-		<property name="connectionMaker" ref = "connectionMaker" />
+		<property name="dataSource" ref = "dataSource" />
 	</bean>
 </beans>

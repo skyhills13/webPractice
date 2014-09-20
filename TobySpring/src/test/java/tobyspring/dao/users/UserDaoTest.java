@@ -1,11 +1,10 @@
 package tobyspring.dao.users;
+
 import java.sql.SQLException;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import tobyspring.dao.users.UserDao;
 import tobyspring.domain.users.User;
 
 
@@ -23,8 +22,8 @@ public class UserDaoTest {
 		UserDao dao = applicationContext.getBean("userDao", UserDao.class);
 		
 		User user = new User();
-		user.setId("dooby");
-		user.setName("dobyJung");
+		user.setId("dby");
+		user.setName("dbyJung");
 		user.setPassword("ehqlehql");
 		
 		dao.add(user);
