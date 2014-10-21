@@ -2,9 +2,11 @@ package tobyspring.dao.users;
 
 import java.sql.SQLException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -13,11 +15,16 @@ import tobyspring.domain.users.User;
 
 public class UserDaoTest {
 
+	private UserDao dao;
+	
+	@Before
+	public void setUp() {
+		ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
+		this.dao = applicationContext.getBean("userDao", UserDao.class);		
+	}
+	
 	@Test
 	public void addAndGet() throws ClassNotFoundException, SQLException{
-		
-		ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
-		UserDao dao = applicationContext.getBean("userDao", UserDao.class);
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
@@ -33,9 +40,6 @@ public class UserDaoTest {
 	
 	@Test
 	public void count() throws SQLException, ClassNotFoundException {
-		ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
-		UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
 		User user1 = new User("dobo", "yoon", "dobopass");
@@ -48,7 +52,12 @@ public class UserDaoTest {
 		dao.add(user3);
 		assertThat(dao.getCount(), is(3));
 		
-		
-		
+	}
+	
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void getUserFailure() throws SQLException, ClassNotFoundException {
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		dao.get("unknown_id");
 	}
 }
