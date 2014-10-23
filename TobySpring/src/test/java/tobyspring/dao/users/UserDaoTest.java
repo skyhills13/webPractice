@@ -1,26 +1,38 @@
 package tobyspring.dao.users;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.sql.SQLException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 import tobyspring.domain.users.User;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations="/applicationContext.xml")
 public class UserDaoTest {
-
+	
+	@Autowired
+	private ApplicationContext applicationContext;
+	
 	private UserDao dao;
+	private User user1;
+	private User user2;
+	private User user3;
 	
 	@Before
 	public void setUp() {
-		ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
-		this.dao = applicationContext.getBean("userDao", UserDao.class);		
+		System.out.println(this.applicationContext);
+		System.out.println(this);
+		this.dao = this.applicationContext.getBean("userDao", UserDao.class);		
 	}
 	
 	@Test
@@ -29,26 +41,26 @@ public class UserDaoTest {
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
 		
-		User user = new User("ggyudori", "yoonsungJung","ggg");
-		dao.add(user);
+		this.user1 = new User("ggyudori", "yoonsungJung","ggg");
+		dao.add(user1);
 		assertThat(dao.getCount(), is(1));
 		
-		User user2 = dao.get(user.getId());
-		assertThat(user2.getName(), is(user.getName()));
-		assertThat(user2.getPassword(), is(user.getPassword()));
+		this.user2 = dao.get(user1.getId());
+		assertThat(user2.getName(), is(user1.getName()));
+		assertThat(user2.getPassword(), is(user1.getPassword()));
 	}
 	
 	@Test
 	public void count() throws SQLException, ClassNotFoundException {
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		User user1 = new User("dobo", "yoon", "dobopass");
+		this.user1 = new User("dobo", "yoon", "dobopass");
 		dao.add(user1);
 		assertThat(dao.getCount(), is(1));
-		User user2 = new User("doba", "sung", "dobapass");
+		this.user2 = new User("doba", "sung", "dobapass");
 		dao.add(user2);
 		assertThat(dao.getCount(), is(2));
-		User user3 = new User("dodo", "jung", "jungpass");
+		this.user3 = new User("dodo", "jung", "jungpass");
 		dao.add(user3);
 		assertThat(dao.getCount(), is(3));
 		
