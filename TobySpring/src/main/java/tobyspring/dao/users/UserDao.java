@@ -58,7 +58,7 @@ public class UserDao {
 	}
 	
 	public void add(final User user) throws ClassNotFoundException, SQLException {
-		class AddStatement implements StatementStrategy{
+		StatementStrategy statementStrategy = new StatementStrategy(){
 			
 			@Override
 			public PreparedStatement makePreparedStatement(Connection conn)
@@ -69,8 +69,7 @@ public class UserDao {
 				ps.setString(3, user.getPassword());
 				return ps;
 			}
-		}
-		StatementStrategy statementStrategy = new AddStatement();
+		};
 		jdbcContextWithStatementStrategy(statementStrategy);
 	}
 
