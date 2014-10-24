@@ -11,10 +11,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import tobyspring.domain.users.User;
 
-public class UserDao {
+public abstract class UserDao {
 	
 	private DataSource dataSource;
 	
+	abstract protected PreparedStatement makeStatement(Connection conn, String sqlQuery) throws SQLException;
+
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -65,11 +67,7 @@ public class UserDao {
 		}
 		return user;
 	}
-	public PreparedStatement makeStatement(Connection conn, String sqlQuery) throws SQLException {
-		PreparedStatement ps;
-		ps = conn.prepareStatement(sqlQuery); 
-		return ps;
-	}
+	
 	
 	public void deleteAll() throws SQLException{
 		Connection conn = null;
