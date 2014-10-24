@@ -65,6 +65,11 @@ public class UserDao {
 		}
 		return user;
 	}
+	public PreparedStatement makeStatement(Connection conn, String sqlQuery) throws SQLException {
+		PreparedStatement ps;
+		ps = conn.prepareStatement(sqlQuery); 
+		return ps;
+	}
 	
 	public void deleteAll() throws SQLException{
 		Connection conn = null;
@@ -72,7 +77,7 @@ public class UserDao {
 		
 		try {
 			conn = dataSource.getConnection();
-			ps = conn.prepareStatement("delete from users");
+			ps = makeStatement(conn, "delete from users");
 			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
