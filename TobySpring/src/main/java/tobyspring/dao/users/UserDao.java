@@ -14,51 +14,22 @@ import tobyspring.domain.users.User;
 public class UserDao {
 	
 	private DataSource dataSource;
+	private JdbcContext jdbcContext;
 	
-
+	
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
+	public void setJdbcContext(JdbcContext jdbcContext) {
+		this.jdbcContext = jdbcContext;
+	}
+	
 	public UserDao() {
-	}
-
-	public UserDao(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
-	public void jdbcContextWithStatementStrategy(StatementStrategy statementStrategy) throws SQLException{
-		Connection conn = null;
-		PreparedStatement ps = null;
-		
-		try {
-			conn = dataSource.getConnection();
-			
-			ps = statementStrategy.makePreparedStatement(conn);
-			
-			ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}				
-			}
-			if( conn != null) {
-				try {
-					conn.close();
-				} catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 	
 	public void add(final User user) throws ClassNotFoundException, SQLException {
-		jdbcContextWithStatementStrategy(new StatementStrategy(){
+		this.jdbcContext.workWithStatementStrategy(new StatementStrategy(){
 			
 			@Override
 			public PreparedStatement makePreparedStatement(Connection conn)
@@ -98,7 +69,7 @@ public class UserDao {
 	}
 	
 	public void deleteAll() throws SQLException{
-		jdbcContextWithStatementStrategy(new StatementStrategy(){
+		this.jdbcContext.workWithStatementStrategy(new StatementStrategy(){
 			@Override
 			public PreparedStatement makePreparedStatement(Connection conn) throws SQLException {
 				PreparedStatement ps = conn.prepareStatement("delete from users");
@@ -106,7 +77,6 @@ public class UserDao {
 			}
 		});
 	}
-	
 	
 	public int getCount() throws SQLException{
 		Connection conn = null;
@@ -150,6 +120,4 @@ public class UserDao {
 		}
 		return count;
 	}
-	
-	
 }

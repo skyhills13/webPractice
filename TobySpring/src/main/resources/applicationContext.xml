@@ -9,7 +9,14 @@
 		<property name="username" value ="root" />
 		<property name="password" value="" />
 	</bean>
+	
+	<bean id="jdbcContext" class="tobyspring.dao.users.JdbcContext">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 	<bean id="userDao" class="tobyspring.dao.users.UserDao">
 		<property name="dataSource" ref = "dataSource" />
+		<property name="jdbcContext" ref = "jdbcContext" />
 	</bean>
+	
 </beans>
