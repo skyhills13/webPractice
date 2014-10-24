@@ -67,28 +67,73 @@ public class UserDao {
 	}
 	
 	public void deleteAll() throws SQLException{
-		Connection conn = dataSource.getConnection();
+		Connection conn = null;
+		PreparedStatement ps = null;
 		
-		PreparedStatement ps = conn.prepareStatement(
-				"delete from users");
-		ps.executeUpdate();
-		ps.close();
-		conn.close();
+		try {
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement("delete from users");
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}				
+			}
+			if( conn != null) {
+				try {
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public int getCount() throws SQLException{
-		Connection conn = dataSource.getConnection();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
-		int count;
-		PreparedStatement ps = conn.prepareStatement(
-				"select count(*) from users");
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		count = rs.getInt(1);
+		int count = 0;
 		
-		rs.close();
-		ps.close();
-		conn.close();
+		try {
+			conn = dataSource.getConnection();
+
+			ps = conn.prepareStatement(
+					"select count(*) from users");
+			rs = ps.executeQuery();
+			rs.next();
+			count = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if( rs != null) {
+				try {
+					rs.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if ( ps != null) {
+				try {
+					ps.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if ( conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return count;
 	}
 	
