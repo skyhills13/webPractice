@@ -27,19 +27,39 @@ public class UserDao {
 		this.dataSource = dataSource;
 	}
 
+	public void jdbcContextWithStatementStrategy(StatementStrategy statementStrategy) throws SQLException{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		try {
+			conn = dataSource.getConnection();
+			
+			ps = statementStrategy.makePreparedStatement(conn);
+			
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}				
+			}
+			if( conn != null) {
+				try {
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public void add(User user) throws ClassNotFoundException, SQLException {
-		
-		Connection conn = dataSource.getConnection();
-		PreparedStatement ps = conn.prepareStatement(
-			"insert into users(id, name, password) values (?, ?, ?)");
-		ps.setString(1, user.getId());
-		ps.setString(2, user.getName());
-		ps.setString(3, user.getPassword());
-		
-		ps.executeUpdate();
-		
-		ps.close();
-		conn.close();
+		StatementStrategy statementStrategy = new AddStatement(user);
+		jdbcContextWithStatementStrategy(statementStrategy);
 	}
 
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -72,35 +92,6 @@ public class UserDao {
 		jdbcContextWithStatementStrategy(st);
 	}
 	
-	public void jdbcContextWithStatementStrategy(StatementStrategy statementStrategy) throws SQLException{
-		Connection conn = null;
-		PreparedStatement ps = null;
-		
-		try {
-			conn = dataSource.getConnection();
-			
-			ps = statementStrategy.makePreparedStatement(conn);
-			
-			ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}				
-			}
-			if( conn != null) {
-				try {
-					conn.close();
-				} catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 	
 	public int getCount() throws SQLException{
 		Connection conn = null;
