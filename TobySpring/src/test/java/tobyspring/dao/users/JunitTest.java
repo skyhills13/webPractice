@@ -1,33 +1,34 @@
 package tobyspring.dao.users;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
 
 public class JunitTest {
 	
-	public static JunitTest junitTest;
+	public static Set<JunitTest> junitTests = new HashSet<JunitTest>();
 	
 	@Test
 	public void test1() {
-		assertThat(this, is(not(sameInstance(junitTest))));
-		junitTest = this;
+		assertThat(junitTests, not(hasItem(this)));
+		junitTests.add(this);
 	}
 	
 	@Test
 	public void test2() {
-		assertThat(this, is(not(sameInstance(junitTest))));
-		junitTest = this;
+		assertThat(junitTests, not(hasItem(this)));
+		junitTests.add(this);
 	}
 	
 	@Test
 	public void test3() {
-		assertThat(this, is(not(sameInstance(junitTest))));
-		junitTest = this;
+		assertThat(junitTests, not(hasItem(this)));
+		junitTests.add(this);
 	}
-
 }
